@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -101,8 +135,264 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="data-processing" class="level2">
 <h2 class="anchored" data-anchor-id="data-processing">Data Processing</h2>
+<section id="first-steps---read-in-one-section-of-the-data." class="level3">
+<h3 class="anchored" data-anchor-id="first-steps---read-in-one-section-of-the-data.">First Steps - Read in one section of the data.</h3>
+<p><strong>1. Read in the data and select only few columns as required.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.1     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www4.stat.ncsu.edu/~online/datasets/EDU01a.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 3198 Columns: 42
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (22): Area_name, STCOU, EDU010187N1, EDU010187N2, EDU010188N1, EDU010188...
+dbl (20): EDU010187F, EDU010187D, EDU010188F, EDU010188D, EDU010189F, EDU010...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Area_name, STCOU, <span class="fu">ends_with</span>(<span class="st">"D"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">area_name=</span>Area_name)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,198 × 12
+   area_name     STCOU EDU010187D EDU010188D EDU010189D EDU010190D EDU010191D
+   &lt;chr&gt;         &lt;chr&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1 UNITED STATES 00000   40024299   39967624   40317775   40737600   41385442
+ 2 ALABAMA       01000     733735     728234     730048     728252     725541
+ 3 Autauga, AL   01001       6829       6900       6920       6847       7008
+ 4 Baldwin, AL   01003      16417      16465      16799      17054      17479
+ 5 Barbour, AL   01005       5071       5098       5068       5156       5173
+ 6 Bibb, AL      01007       3557       3508       3571       3621       3652
+ 7 Blount, AL    01009       7319       7223       7205       7209       7155
+ 8 Bullock, AL   01011       2014       1980       1985       1983       1985
+ 9 Butler, AL    01013       4640       4582       4610       4591       4544
+10 Calhoun, AL   01015      20939      20923      20907      20849      20768
+# ℹ 3,188 more rows
+# ℹ 5 more variables: EDU010192D &lt;dbl&gt;, EDU010193D &lt;dbl&gt;, EDU010194D &lt;dbl&gt;,
+#   EDU010195D &lt;dbl&gt;, EDU010196D &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p><strong>2. Convert the data into long format where each row has only one enrollment value for that Area_name.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">12</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"label"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"enrollment_value"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31,980 × 4
+   area_name     STCOU label      enrollment_value
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt;
+ 1 UNITED STATES 00000 EDU010187D         40024299
+ 2 UNITED STATES 00000 EDU010188D         39967624
+ 3 UNITED STATES 00000 EDU010189D         40317775
+ 4 UNITED STATES 00000 EDU010190D         40737600
+ 5 UNITED STATES 00000 EDU010191D         41385442
+ 6 UNITED STATES 00000 EDU010192D         42088151
+ 7 UNITED STATES 00000 EDU010193D         42724710
+ 8 UNITED STATES 00000 EDU010194D         43369917
+ 9 UNITED STATES 00000 EDU010195D         43993459
+10 UNITED STATES 00000 EDU010196D         44715737
+# ℹ 31,970 more rows</code></pre>
+</div>
+</div>
+<p><strong>3. Parse the “label” string</strong><br>
+For the “label” column, the first three characters represent the survey with the next four representing the type of value you have from that survey. The last two digits prior to the “D” represent the year of the measurement.</p>
+<ul>
+<li>Parse the “label” string to pull out the year and convert the year into a numeric value such as 1997 or 2002.</li>
+<li>Grab the first three characters and following four digits to create a new variable representing which measurement was grabbed.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create a function to convert two-digit character to four-digit numeric year.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>convert_year <span class="ot">&lt;-</span> <span class="cf">function</span>(year) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(year)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(year <span class="sc">&gt;</span> <span class="dv">24</span>, <span class="dv">1900</span> <span class="sc">+</span> year, <span class="dv">2000</span> <span class="sc">+</span> year)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># parse the "label" string</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">substr</span>(label, <span class="dv">8</span>, <span class="dv">9</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">convert_year</span>(year)) <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># grab measurement information</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">measurement =</span> <span class="fu">substr</span>(label, <span class="dv">1</span>, <span class="dv">7</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31,980 × 6
+   area_name     STCOU label      enrollment_value  year measurement
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      
+ 1 UNITED STATES 00000 EDU010187D         40024299  1987 EDU0101    
+ 2 UNITED STATES 00000 EDU010188D         39967624  1988 EDU0101    
+ 3 UNITED STATES 00000 EDU010189D         40317775  1989 EDU0101    
+ 4 UNITED STATES 00000 EDU010190D         40737600  1990 EDU0101    
+ 5 UNITED STATES 00000 EDU010191D         41385442  1991 EDU0101    
+ 6 UNITED STATES 00000 EDU010192D         42088151  1992 EDU0101    
+ 7 UNITED STATES 00000 EDU010193D         42724710  1993 EDU0101    
+ 8 UNITED STATES 00000 EDU010194D         43369917  1994 EDU0101    
+ 9 UNITED STATES 00000 EDU010195D         43993459  1995 EDU0101    
+10 UNITED STATES 00000 EDU010196D         44715737  1996 EDU0101    
+# ℹ 31,970 more rows</code></pre>
+</div>
+</div>
+<p><strong>4. Create two data sets</strong></p>
+<ul>
+<li>one data set that contains only non-county data</li>
+<li>one data set that contains only county level data</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_noncounty <span class="ot">&lt;-</span> data [<span class="sc">-</span><span class="fu">grep</span>(<span class="at">pattern =</span> <span class="st">", </span><span class="sc">\\</span><span class="st">w</span><span class="sc">\\</span><span class="st">w"</span>, data<span class="sc">$</span>area_name),]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data_noncounty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 530 × 6
+   area_name     STCOU label      enrollment_value  year measurement
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      
+ 1 UNITED STATES 00000 EDU010187D         40024299  1987 EDU0101    
+ 2 UNITED STATES 00000 EDU010188D         39967624  1988 EDU0101    
+ 3 UNITED STATES 00000 EDU010189D         40317775  1989 EDU0101    
+ 4 UNITED STATES 00000 EDU010190D         40737600  1990 EDU0101    
+ 5 UNITED STATES 00000 EDU010191D         41385442  1991 EDU0101    
+ 6 UNITED STATES 00000 EDU010192D         42088151  1992 EDU0101    
+ 7 UNITED STATES 00000 EDU010193D         42724710  1993 EDU0101    
+ 8 UNITED STATES 00000 EDU010194D         43369917  1994 EDU0101    
+ 9 UNITED STATES 00000 EDU010195D         43993459  1995 EDU0101    
+10 UNITED STATES 00000 EDU010196D         44715737  1996 EDU0101    
+# ℹ 520 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data_county <span class="ot">&lt;-</span> data [<span class="fu">grep</span>(<span class="at">pattern =</span> <span class="st">", </span><span class="sc">\\</span><span class="st">w</span><span class="sc">\\</span><span class="st">w"</span>, data<span class="sc">$</span>area_name),]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data_county</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31,450 × 6
+   area_name   STCOU label      enrollment_value  year measurement
+   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      
+ 1 Autauga, AL 01001 EDU010187D             6829  1987 EDU0101    
+ 2 Autauga, AL 01001 EDU010188D             6900  1988 EDU0101    
+ 3 Autauga, AL 01001 EDU010189D             6920  1989 EDU0101    
+ 4 Autauga, AL 01001 EDU010190D             6847  1990 EDU0101    
+ 5 Autauga, AL 01001 EDU010191D             7008  1991 EDU0101    
+ 6 Autauga, AL 01001 EDU010192D             7137  1992 EDU0101    
+ 7 Autauga, AL 01001 EDU010193D             7152  1993 EDU0101    
+ 8 Autauga, AL 01001 EDU010194D             7381  1994 EDU0101    
+ 9 Autauga, AL 01001 EDU010195D             7568  1995 EDU0101    
+10 Autauga, AL 01001 EDU010196D             7834  1996 EDU0101    
+# ℹ 31,440 more rows</code></pre>
+</div>
+</div>
+<ul>
+<li>For the county level data, add a class to the tibble called county.</li>
+<li>Similarly, add a class to the non-county data called state.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(data_county) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"county"</span>, <span class="fu">class</span>(data_county))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(data_county)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "county"     "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(data_noncounty) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="fu">class</span>(data_noncounty))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(data_noncounty)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "state"      "tbl_df"     "tbl"        "data.frame"</code></pre>
+</div>
+</div>
+<p><strong>5. For the county level tibble, create a new variable that describes which state one of these county measurements corresponds to.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_county <span class="ot">&lt;-</span> data_county <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">substr</span>(area_name, <span class="fu">nchar</span>(area_name)<span class="sc">-</span><span class="dv">1</span>, <span class="fu">nchar</span>(area_name)))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>data_county</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31,450 × 7
+   area_name   STCOU label      enrollment_value  year measurement state
+   &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;
+ 1 Autauga, AL 01001 EDU010187D             6829  1987 EDU0101     AL   
+ 2 Autauga, AL 01001 EDU010188D             6900  1988 EDU0101     AL   
+ 3 Autauga, AL 01001 EDU010189D             6920  1989 EDU0101     AL   
+ 4 Autauga, AL 01001 EDU010190D             6847  1990 EDU0101     AL   
+ 5 Autauga, AL 01001 EDU010191D             7008  1991 EDU0101     AL   
+ 6 Autauga, AL 01001 EDU010192D             7137  1992 EDU0101     AL   
+ 7 Autauga, AL 01001 EDU010193D             7152  1993 EDU0101     AL   
+ 8 Autauga, AL 01001 EDU010194D             7381  1994 EDU0101     AL   
+ 9 Autauga, AL 01001 EDU010195D             7568  1995 EDU0101     AL   
+10 Autauga, AL 01001 EDU010196D             7834  1996 EDU0101     AL   
+# ℹ 31,440 more rows</code></pre>
+</div>
+</div>
+<p><strong>6. For the non-county level tibble, create a new variable called “division” corresponding to the state’s classification of division here. If row corresponds to a non-state (i.e.&nbsp;UNITED STATES), return ERROR for the division. The code for this part will not be a ton of fun but can be made easier with the use of %in%.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define the state’s classification of division</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Northeast <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CONNECTICUT"</span>, <span class="st">"MAINE"</span>, <span class="st">"MASSACHUSETTS"</span>, <span class="st">"NEW HAMPSHIRE"</span>, </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"NEW JERSEY"</span>, <span class="st">"NEW YORK"</span>, <span class="st">"PENNSYLVANIA"</span>, <span class="st">"RHODE ISLAND"</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>               <span class="st">"VERMONT"</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>Midwest <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ILLINOIS"</span>, <span class="st">"INDIANA"</span>, <span class="st">"IOWA"</span>, <span class="st">"KANSAS"</span>, <span class="st">"MICHIGAN"</span>, </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"MINNESOTA"</span>, <span class="st">"MISSOURI"</span>, <span class="st">"NEBRASKA"</span>, <span class="st">"NORTH DAKOTA"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"OHIO"</span>, <span class="st">"SOUTH DAKOTA"</span>, <span class="st">"WISCONSIN"</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>South <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALABAMA"</span>, <span class="st">"ARKANSAS"</span>, <span class="st">"DELAWARE"</span>, <span class="st">"DISTRICT OF COLUMBIA"</span>,</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">"FLORIDA"</span>, <span class="st">"GEORGIA"</span>, <span class="st">"KENTUCKY"</span>, <span class="st">"LOUISIANA"</span>, <span class="st">"MARYLAND"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">"MISSISSIPPI"</span>, <span class="st">"NORTH CAROLINA"</span>, <span class="st">"OKLAHOMA"</span>, <span class="st">"SOUTH CAROLINA"</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>           <span class="st">"TENNESSEE"</span>, <span class="st">"TEXAS"</span>, <span class="st">"VIRGINIA"</span>, <span class="st">"WEST VIRGINIA"</span>)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>West <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"ALASKA"</span>, <span class="st">"ARIZONA"</span>, <span class="st">"CALIFORNIA"</span>, <span class="st">"COLORADO"</span>, <span class="st">"HAWAII"</span>, <span class="st">"IDAHO"</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>          <span class="st">"MONTANA"</span>, <span class="st">"NEVADA"</span>, <span class="st">"NEW MEXICO"</span>, <span class="st">"OREGON"</span>, <span class="st">"UTAH"</span>, <span class="st">"WASHINGTON"</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>          <span class="st">"WYOMING"</span>)</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>data_noncounty <span class="ot">&lt;-</span> data_noncounty <span class="sc">|&gt;</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert area_name to upper case</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_name =</span> <span class="fu">toupper</span>(area_name)) <span class="sc">|&gt;</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># classify the states</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">division =</span> <span class="fu">ifelse</span>(area_name <span class="sc">==</span> <span class="st">"UNITED STATES"</span>, <span class="st">"ERROR"</span>, </span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">ifelse</span> (area_name <span class="sc">%in%</span> Northeast,</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Northeast"</span>, </span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">ifelse</span>(area_name <span class="sc">%in%</span> Midwest,</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">"Midwest"</span>, </span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">ifelse</span>(area_name <span class="sc">%in%</span> South,</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">"South"</span>,</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>                                                 <span class="fu">ifelse</span>(area_name <span class="sc">%in%</span> West, </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"West"</span>, </span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>                                                        <span class="st">"CHECK"</span>))))))</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>data_noncounty</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 530 × 7
+   area_name     STCOU label      enrollment_value  year measurement division
+   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;   
+ 1 UNITED STATES 00000 EDU010187D         40024299  1987 EDU0101     ERROR   
+ 2 UNITED STATES 00000 EDU010188D         39967624  1988 EDU0101     ERROR   
+ 3 UNITED STATES 00000 EDU010189D         40317775  1989 EDU0101     ERROR   
+ 4 UNITED STATES 00000 EDU010190D         40737600  1990 EDU0101     ERROR   
+ 5 UNITED STATES 00000 EDU010191D         41385442  1991 EDU0101     ERROR   
+ 6 UNITED STATES 00000 EDU010192D         42088151  1992 EDU0101     ERROR   
+ 7 UNITED STATES 00000 EDU010193D         42724710  1993 EDU0101     ERROR   
+ 8 UNITED STATES 00000 EDU010194D         43369917  1994 EDU0101     ERROR   
+ 9 UNITED STATES 00000 EDU010195D         43993459  1995 EDU0101     ERROR   
+10 UNITED STATES 00000 EDU010196D         44715737  1996 EDU0101     ERROR   
+# ℹ 520 more rows</code></pre>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
