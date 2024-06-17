@@ -120,4 +120,24 @@ data_noncounty
 
 **Now we want to repeat the above process for the 2nd component of the data set.**
 
+```{r}
+data2 <- read_csv("https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv")
+
+# Define the function
+function_for_step_1_2 <- function(data, value_col_name = "enrollment_value") {
+  data2 <- data2 |>
+    select(Area_name, STCOU, ends_with("D")) |>
+    rename(area_name = Area_name)
+  
+  data2 <- data2 |>
+    pivot_longer(cols = 3:12, 
+                 names_to = "label", 
+                 values_to = value_col_name)
+  
+  return(data2)
+}
+
+# Process the data
+data2 <- function_for_step_1_2(data2)
+```
 
