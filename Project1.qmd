@@ -117,3 +117,7 @@ data_noncounty <- data_noncounty |>
 data_noncounty
 ```
 
+
+**Now we want to repeat the above process for the 2nd component of the data set.**
+
+
