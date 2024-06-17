@@ -124,65 +124,39 @@ data_noncounty
 ```{r}
 data2 <- read_csv("https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv")
 
-# Define the function for steps 1 and 2
-function_for_step_1_2 <- function(data, value_col_name = "enrollment_value") {
+#Crate a function for steps 1 and 2
+function_for_step_1_2 <- function(data2, value_col_name = "enrollment_value") {
   data2 <- data2 |>
     select(Area_name, STCOU, ends_with("D")) |>
-    rename(area_name = Area_name)
-  
-  data2 <- data2 |>
+    rename(area_name = Area_name) |>
     pivot_longer(cols = 3:12, 
                  names_to = "label", 
                  values_to = value_col_name)
-  
   return(data2)
 }
 
-# Process the data
+#Process data
 data2 <- function_for_step_1_2(data2)
 
-# Define the function for step 3
-function_for_step_3 <- function(data) {
-  data2 <- data2 |>
-    mutate(year = substr(label, 8, 9)) |>
-    mutate(year = as.numeric(year)) |>
-    mutate(year = ifelse(year > 24, 1900 + year, 2000 + year)) |>
-    mutate(measurement = substr(label, 1, 7))
-  
+#Crate a function for step 3
+function_for_step_3 <- function(data2) {
+  data2 <- data2 %>%
+    mutate(year = as.numeric(substr(label, 8, 9)),
+           year = ifelse(year > 24, 1900 + year, 2000 + year),
+           measurement = substr(label, 1, 7))
   return(data2)
 }
 
-# Process the data
 data2 <- function_for_step_3(data2)
 
-# Define the function for step 4
-function_for_step_4 <- function(data) {
-    data_noncounty2 <- data2 [-grep(pattern = ", \\w\\w", data2$area_name),]
-    data_county2 <- data2 [grep(pattern = ", \\w\\w", data2$area_name),] 
-    data_county2 <- data_county2 |>
-    mutate(state = substr(area_name, nchar(area_name)-1, nchar(area_name)))
-
-    list(noncounty = data_noncounty2, county = data_county2)    
-}
-
-# Process the data
-data_noncounty2 <- data2$noncounty
-data_county2 <- data2$county
-
-# Define the function for step 5
 function_for_step_5 <- function(data_county2) {
-  data_county2 <- data_county2 |>
+  data_county2 <- data_county2 %>%
     mutate(state = substr(area_name, nchar(area_name) - 1, nchar(area_name)))
-  
   return(data_county2)
 }
 
-# Process the data
-data_county2 <- function_for_step_5(data_county2)
-
-# Define the function for step 6
+#Crate a function for step 6
 function_for_step_6 <- function(data_noncounty2) {
-  # Define the regions
   Northeast <- c("CONNECTICUT", "MAINE", "MASSACHUSETTS", "NEW HAMPSHIRE", 
                  "NEW JERSEY", "NEW YORK", "PENNSYLVANIA", "RHODE ISLAND",
                  "VERMONT")
@@ -197,19 +171,36 @@ function_for_step_6 <- function(data_noncounty2) {
             "MONTANA", "NEVADA", "NEW MEXICO", "OREGON", "UTAH", "WASHINGTON",
             "WYOMING")
   
-  # Convert area_name to upper case and classify the states
-  data_noncounty2 <- data_noncounty2 |>
-    mutate(area_name = toupper(area_name)) |>
-    mutate(division = ifelse(area_name == "UNITED STATES", "ERROR", 
-                             ifelse(area_name %in% Northeast, "Northeast", 
-                                    ifelse(area_name %in% Midwest, "Midwest", 
-                                           ifelse(area_name %in% South, "South",
-                                                  ifelse(area_name %in% West, "West", "CHECK"))))))
-  
+  data_noncounty2 <- data_noncounty2 %>%
+    mutate(area_name = toupper(area_name),
+           division = case_when(
+             area_name == "UNITED STATES" ~ "ERROR",
+             area_name %in% Northeast ~ "Northeast",
+             area_name %in% Midwest ~ "Midwest",
+             area_name %in% South ~ "South",
+             area_name %in% West ~ "West",
+             TRUE ~ "CHECK"
+           ))
   return(data_noncounty2)
 }
 
-# Process the data
-data_noncounty2 <- function_for_step_5(data_noncounty2)
+#Crate a function for final step
+function_for_steps4_5_6 <- function(data2) {
+  data_noncounty2 <- data2[-grep(pattern = ", \\w\\w", data2$area_name), ]
+  data_county2 <- data2[grep(pattern = ", \\w\\w", data2$area_name), ]
+  
+  class(data_noncounty2) <- c("state", class(data_noncounty2))
+  class(data_county2) <- c("county", class(data_county2))
+  
+  data_county2 <- function_for_step_5(data_county2)
+  data_noncounty2 <- function_for_step_6(data_noncounty2)
+  
+  return(list(noncounty2 = data_noncounty2, county2 = data_county2))
+}
+
+#Process data
+results <- function_for_steps4_5_6(data2)
+data2_noncounty <- results$noncounty
+data2_county <- results$county
 ```
 
