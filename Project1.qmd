@@ -202,5 +202,56 @@ function_for_steps4_5_6 <- function(data2) {
 results <- function_for_steps4_5_6(data2)
 data2_noncounty <- results$noncounty
 data2_county <- results$county
+
+
+library(tidyverse)
+library(readr)
+
+# Define wrapper function
+my_wrapper <- function(url, default_var_name = "enrollment_value") {
+  data <- read_csv(url)
+  
+  # Function for steps 1 and 2
+  data <- data %>%
+    select(Area_name, STCOU, ends_with("D")) %>%
+    rename(area_name = Area_name) %>%
+    pivot_longer(cols = 3:12, names_to = "label", values_to = default_var_name)
+  
+  # Function for step 3
+  data <- data %>%
+    mutate(year = as.numeric(substr(label, 8, 9)),
+           year = ifelse(year > 24, 1900 + year, 2000 + year),
+           measurement = substr(label, 1, 7))
+  
+  # Function for steps 4, 5, and 6
+  function_for_steps4_5_6 <- function(data2) {
+    data_noncounty2 <- data2[-grep(pattern = ", \\w\\w", data2$area_name), ]
+    data_county2 <- data2[grep(pattern = ", \\w\\w", data2$area_name), ]
+    
+    class(data_noncounty2) <- c("state", class(data_noncounty2))
+    class(data_county2) <- c("county", class(data_county2))
+    
+    data_county2 <- function_for_step_5(data_county2)
+    data_noncounty2 <- function_for_step_6(data_noncounty2)
+    
+    return(list(noncounty2 = data_noncounty2, county2 = data_county2))
+  }
+  
+  # Process data
+  results <- function_for_steps4_5_6(data)
+  data_noncounty <- results$noncounty2
+  data_county <- results$county2
+  
+  # Return the results
+  return(list(noncounty = data_noncounty, county = data_county))
+}
+
+# Example usage:
+url <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv"
+results <- my_wrapper(url)
+
+# Access non-county and county data
+data_noncounty3 <- results$noncounty
+data_county3 <- results$county
 ```
 
