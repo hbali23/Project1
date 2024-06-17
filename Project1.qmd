@@ -279,3 +279,19 @@ data2_county <- results2$county
 
 ```
 
+
+**Single short function**
+```{r}
+#Creat combined short function
+combine <- function(results1, results2) {
+  combined_county <- bind_rows(results1$county, results2$county)
+  combined_noncounty <- bind_rows(results1$noncounty, results2$noncounty)
+  return(list(county = combined_county, noncounty = combined_noncounty))
+}
+
+#Process data
+combined_results <- combine(results1, results2)
+combined_county <- combined_results$county
+combined_noncounty <- combined_results$noncounty
+```
+
