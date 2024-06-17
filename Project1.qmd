@@ -180,6 +180,36 @@ function_for_step_5 <- function(data_county2) {
 # Process the data
 data_county2 <- function_for_step_5(data_county2)
 
+# Define the function for step 6
+function_for_step_6 <- function(data_noncounty2) {
+  # Define the regions
+  Northeast <- c("CONNECTICUT", "MAINE", "MASSACHUSETTS", "NEW HAMPSHIRE", 
+                 "NEW JERSEY", "NEW YORK", "PENNSYLVANIA", "RHODE ISLAND",
+                 "VERMONT")
+  Midwest <- c("ILLINOIS", "INDIANA", "IOWA", "KANSAS", "MICHIGAN", 
+               "MINNESOTA", "MISSOURI", "NEBRASKA", "NORTH DAKOTA",
+               "OHIO", "SOUTH DAKOTA", "WISCONSIN")
+  South <- c("ALABAMA", "ARKANSAS", "DELAWARE", "DISTRICT OF COLUMBIA",
+             "FLORIDA", "GEORGIA", "KENTUCKY", "LOUISIANA", "MARYLAND",
+             "MISSISSIPPI", "NORTH CAROLINA", "OKLAHOMA", "SOUTH CAROLINA",
+             "TENNESSEE", "TEXAS", "VIRGINIA", "WEST VIRGINIA")
+  West <- c("ALASKA", "ARIZONA", "CALIFORNIA", "COLORADO", "HAWAII", "IDAHO",
+            "MONTANA", "NEVADA", "NEW MEXICO", "OREGON", "UTAH", "WASHINGTON",
+            "WYOMING")
+  
+  # Convert area_name to upper case and classify the states
+  data_noncounty2 <- data_noncounty2 |>
+    mutate(area_name = toupper(area_name)) |>
+    mutate(division = ifelse(area_name == "UNITED STATES", "ERROR", 
+                             ifelse(area_name %in% Northeast, "Northeast", 
+                                    ifelse(area_name %in% Midwest, "Midwest", 
+                                           ifelse(area_name %in% South, "South",
+                                                  ifelse(area_name %in% West, "West", "CHECK"))))))
+  
+  return(data_noncounty2)
+}
 
+# Process the data
+data_noncounty2 <- function_for_step_5(data_noncounty2)
 ```
 
