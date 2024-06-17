@@ -169,5 +169,17 @@ function_for_step_4 <- function(data) {
 data_noncounty2 <- data2$noncounty
 data_county2 <- data2$county
 
+# Define the function for step 5
+function_for_step_5 <- function(data_county2) {
+  data_county2 <- data_county2 |>
+    mutate(state = substr(area_name, nchar(area_name) - 1, nchar(area_name)))
+  
+  return(data_county2)
+}
+
+# Process the data
+data_county2 <- function_for_step_5(data_county2)
+
+
 ```
 
