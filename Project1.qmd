@@ -155,5 +155,19 @@ function_for_step_3 <- function(data) {
 # Process the data
 data2 <- function_for_step_3(data2)
 
+# Define the function for step 4
+function_for_step_4 <- function(data) {
+    data_noncounty2 <- data2 [-grep(pattern = ", \\w\\w", data2$area_name),]
+    data_county2 <- data2 [grep(pattern = ", \\w\\w", data2$area_name),] 
+    data_county2 <- data_county2 |>
+    mutate(state = substr(area_name, nchar(area_name)-1, nchar(area_name)))
+
+    list(noncounty = data_noncounty2, county = data_county2)    
+}
+
+# Process the data
+data_noncounty2 <- data2$noncounty
+data_county2 <- data2$county
+
 ```
 
