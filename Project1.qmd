@@ -202,11 +202,11 @@ function_for_steps4_5_6 <- function(data2) {
 results <- function_for_steps4_5_6(data2)
 data2_noncounty <- results$noncounty
 data2_county <- results$county
+```
 
+**Creating wrapper function**
 
-library(tidyverse)
-library(readr)
-
+```{r}
 # Define wrapper function
 my_wrapper <- function(url, default_var_name = "enrollment_value") {
   data <- read_csv(url)
@@ -253,5 +253,29 @@ results <- my_wrapper(url)
 # Access non-county and county data
 data_noncounty3 <- results$noncounty
 data_county3 <- results$county
+```
+
+
+**Call it and combine your data**
+
+```{r}
+# URLs for the two CSV files
+url1 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01a.csv"
+url2 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv"  
+
+# Call the wrapper function for the first dataset
+results1 <- my_wrapper(url1, default_var_name = "enrollment_value")
+
+# Process data
+data1_noncounty <- results1$noncounty
+data1_county <- results1$county
+
+# Call the wrapper function for the second dataset
+results2 <- my_wrapper(url2, default_var_name = "enrollment_value")
+
+# Process data
+data2_noncounty <- results2$noncounty
+data2_county <- results2$county
+
 ```
 
