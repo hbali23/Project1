@@ -406,6 +406,44 @@ plot.county(combined_county, State = "PA", top_bottom = "top", num_counties = 8)
 
 **Lastly, read in another couple similar data sets and apply your functions!**
 ```{r}
+# URLs for the two CSV files given previously
+url3 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01a.csv"
+url4 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01b.csv"  
+url5 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01c.csv"
+url6 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01d.csv"
+
+# Process data
+results3 <- my_wrapper(urL3, default_var_name = "enrollment_value")
+data3_noncounty <- results3$noncounty
+data3_county <- results3$county
+# Process data
+results4 <- my_wrapper(url4, default_var_name = "enrollment_value")
+data4_noncounty <- results4$noncounty
+data4_county <- results4$county
+# Process data
+results5 <- my_wrapper(url5, default_var_name = "enrollment_value")
+data5_noncounty <- results5$noncounty
+data5_county <- results5$county
+# Process data
+results6 <- my_wrapper(url6, default_var_name = "enrollment_value")
+data6_noncounty <- results6$noncounty
+data6_county <- results6$county
+
+
+#Run your data combining function
+combined_results2 <- combine(results3, results4)
+combined_county2 <- combined_results2$county2
+combined_noncounty2 <- combined_results2$noncounty2
+
+#Run your data combining function
+combined_results3 <- combine(results5, results6)
+combined_county3 <- combined_results3$county3
+combined_noncounty3 <- combined_results3$noncounty3
+
+plot.county(combined_county, State = "CA", top_bottom = "top", num_counties = 15)
+plot.county(combined_county, State = "TX", top_bottom = "top", num_counties = 4)
+plot.county(combined_county)
+plot.county(combined_county, State = "NY", top_bottom = "top", num_counties = 10)
 
 ```
 
