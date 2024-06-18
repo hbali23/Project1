@@ -358,7 +358,7 @@ plot.county <- function(df, State = "default_state",
   # Create the plot
   ggplot(plot_data, aes(x = year, y = get(var_name), color = area_name)) +
     geom_line() +
-    labs(title = paste("Mean", var_name, "for Top/Bottom", num_counties, "Counties in", State),
+    labs(title = paste("Mean", var_name, "for", top_bottom, num_counties, "Counties in", State),
       x = "Year",
       y = paste("Mean", var_name),
       color = "County")
@@ -368,6 +368,7 @@ plot.county <- function(df, State = "default_state",
 ```{r, eval=FALSE, echo=FALSE}
 # test out this function
 plot.county(combined_county, State = "AK")
+plot.county(combined_county, State = "AZ", top_bottom = "bottom", num_counties = 7)
 ```
 
 
