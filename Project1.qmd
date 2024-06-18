@@ -1,5 +1,5 @@
 ---
-title: "Project1"
+title: "ST558 Project1-Group K: Hanan Ali & Wenna Han"
 format: html
 editor: visual
 ---
@@ -114,10 +114,10 @@ data_noncounty <- data_noncounty |>
                                                  "South",
                                                  ifelse(area_name %in% West, 
                                                         "West", 
+                                                        #output CHECK if anything unexpected
                                                         "CHECK"))))))
 data_noncounty
 ```
-
 
 **Now we want to repeat the above process for the 2nd component of the data set.**
 
@@ -255,7 +255,6 @@ data_noncounty3 <- results$noncounty
 data_county3 <- results$county
 ```
 
-
 **Call it and combine your data**
 
 ```{r}
@@ -276,11 +275,10 @@ results2 <- my_wrapper(url2, default_var_name = "enrollment_value")
 # Process data
 data2_noncounty <- results2$noncounty
 data2_county <- results2$county
-
 ```
 
-
 **Single short function**
+
 ```{r}
 #Creat combined short function
 combine <- function(results1, results2) {
@@ -294,4 +292,31 @@ combined_results <- combine(results1, results2)
 combined_county <- combined_results$county
 combined_noncounty <- combined_results$noncounty
 ```
+
+### Writing a Generic Function for Summarizing
+
+**write a function that plots the mean value of the statistic (enrollment for this data set) across the years for each Division. That is, on the x-axis we want the numeric year value, on the y-axis we want the mean of the statistic for each Division and numeric year. Also, we want to remove observations at the ERROR setting of Division.**
+```{r}
+plot.state <- function(df, var_name = "_your_default_value_"){
+  # Calculate the mean of the statistic for each Division and year
+  df_summary <- df |>
+    filter(division != "ERROR") |>  # Remove the ERROR setting
+    group_by(year, division) |>  # Group by year and division
+    summarize(mean_statistic = mean(get(var_name)))  # Calculate mean
+  
+  # Create a line plot with ggplot
+  ggplot(df_summary, aes(x = year, y = mean_statistic, color = division)) +
+    geom_line() +
+    labs(title = paste("Mean", var_name, "across Years by Division"),
+         x = "year",
+         y = paste("Mean", var_name),
+         color = "division")
+}
+```
+
+```{r}
+# test out this function
+plot.state(combined_noncounty, var_name = "enrollment_value")
+```
+  
 
