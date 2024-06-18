@@ -372,3 +372,40 @@ plot.county(combined_county, State = "AZ", top_bottom = "bottom", num_counties =
 ```
 
 
+**Put it together section**
+
+```{r}
+# URLs for the two CSV files given previously
+url1 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01a.csv"
+url2 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv"  
+
+# Process data
+results1 <- my_wrapper(url1, default_var_name = "enrollment_value")
+data1_noncounty <- results1$noncounty
+data1_county <- results1$county
+# Process data
+results2 <- my_wrapper(url2, default_var_name = "enrollment_value")
+data2_noncounty <- results2$noncounty
+data2_county <- results2$county
+
+#Run your data combining function
+combined_results <- combine(results1, results2)
+combined_county <- combined_results$county
+combined_noncounty <- combined_results$noncounty
+
+#Once specifying the state to be “NC”, the group being the top, the number looked at being 20
+plot.county(combined_county, State = "NC", top_bottom = "top", num_counties = 20)
+#Once specifying the state to be “SC”, the group being the bottom, the number looked at being 7
+plot.county(combined_county, State = "SC", top_bottom = "bottom", num_counties = 7)
+#Once without specifying anything (defaults used)
+plot.county(combined_county)
+#Once specifying the state to be “PA”, the group being the top, the number looked at being 8
+plot.county(combined_county, State = "PA", top_bottom = "top", num_counties = 8)
+
+```
+
+**Lastly, read in another couple similar data sets and apply your functions!**
+```{r}
+
+```
+
