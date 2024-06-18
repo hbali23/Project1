@@ -296,6 +296,7 @@ combined_noncounty <- combined_results$noncounty
 ### Writing a Generic Function for Summarizing
 
 **write a function that plots the mean value of the statistic (enrollment for this data set) across the years for each Division. That is, on the x-axis we want the numeric year value, on the y-axis we want the mean of the statistic for each Division and numeric year. Also, we want to remove observations at the ERROR setting of Division.**
+
 ```{r}
 plot.state <- function(df, var_name = "_your_default_value_"){
   # Calculate the mean of the statistic for each Division and year
@@ -318,10 +319,10 @@ plot.state <- function(df, var_name = "_your_default_value_"){
 # test out this function
 plot.state(combined_noncounty, var_name = "enrollment_value")
 ```
-  
-**For the class county we’ll do a similar plotting function but with more flexibility. This function should allow the user to:**
-• specify the state of interest, giving a default value if not specified
-• determine whether the ‘top’ or ‘bottom’ most counties should be looked at with a default for ‘top’
+
+**For the class county we’ll do a similar plotting function but with more flexibility. This function should allow the user to:**\
+• specify the state of interest, giving a default value if not specified.\
+• determine whether the ‘top’ or ‘bottom’ most counties should be looked at with a default for ‘top’.\
 • instruct how many of the ‘top’ or ‘bottom’ will be investigated with a default value of 5
 
 ```{r}
@@ -371,7 +372,6 @@ plot.county(combined_county, State = "AK")
 plot.county(combined_county, State = "AZ", top_bottom = "bottom", num_counties = 7)
 ```
 
-
 **Put it together section**
 
 ```{r}
@@ -405,6 +405,7 @@ plot.county(combined_county, State = "PA", top_bottom = "top", num_counties = 8)
 ```
 
 **Lastly, read in another couple similar data sets and apply your functions!**
+
 ```{r}
 # URLs for the two CSV files given previously
 url3 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01a.csv"
@@ -446,4 +447,3 @@ plot.county(combined_county)
 plot.county(combined_county, State = "NY", top_bottom = "top", num_counties = 10)
 
 ```
-
