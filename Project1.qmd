@@ -326,7 +326,7 @@ plot.state(combined_noncounty, var_name = "enrollment_value")
 • instruct how many of the ‘top’ or ‘bottom’ will be investigated with a default value of 5
 
 ```{r}
-plot.county <- function(df, State = "default_state", 
+plot.county <- function(df, State = "AL", 
                         var_name = "enrollment_value", 
                         top_bottom = "top", 
                         num_counties = 5) {
@@ -379,29 +379,35 @@ plot.county(combined_county, State = "AZ", top_bottom = "bottom", num_counties =
 url1 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01a.csv"
 url2 <- "https://www4.stat.ncsu.edu/~online/datasets/EDU01b.csv"  
 
-# Process data
+# Process data - URL1
 results1 <- my_wrapper(url1, default_var_name = "enrollment_value")
 data1_noncounty <- results1$noncounty
 data1_county <- results1$county
-# Process data
+# Process data - URL2
 results2 <- my_wrapper(url2, default_var_name = "enrollment_value")
 data2_noncounty <- results2$noncounty
 data2_county <- results2$county
 
-#Run your data combining function
+# Run your data combining function
 combined_results <- combine(results1, results2)
 combined_county <- combined_results$county
 combined_noncounty <- combined_results$noncounty
 
-#Once specifying the state to be “NC”, the group being the top, the number looked at being 20
-plot.county(combined_county, State = "NC", top_bottom = "top", num_counties = 20)
-#Once specifying the state to be “SC”, the group being the bottom, the number looked at being 7
-plot.county(combined_county, State = "SC", top_bottom = "bottom", num_counties = 7)
-#Once without specifying anything (defaults used)
-plot.county(combined_county)
-#Once specifying the state to be “PA”, the group being the top, the number looked at being 8
-plot.county(combined_county, State = "PA", top_bottom = "top", num_counties = 8)
+# the plot function on the state data frame
+plot.state(combined_noncounty, var_name = "enrollment_value")
 
+# Use the plot function on the county data frame
+# Once specifying the state to be “NC”, the group being the top, the number looked at being 20
+plot.county(combined_county, State = "NC", top_bottom = "top", num_counties = 20)
+
+# Once specifying the state to be “SC”, the group being the bottom, the number looked at being 7
+plot.county(combined_county, State = "SC", top_bottom = "bottom", num_counties = 7)
+
+# Once without specifying anything (defaults used)
+plot.county(combined_county)
+
+# Once specifying the state to be “PA”, the group being the top, the number looked at being 8
+plot.county(combined_county, State = "PA", top_bottom = "top", num_counties = 8)
 ```
 
 **Lastly, read in another couple similar data sets and apply your functions!**
@@ -413,37 +419,43 @@ url4 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01b.csv"
 url5 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01c.csv"
 url6 <- "https://www4.stat.ncsu.edu/~online/datasets/PST01d.csv"
 
-# Process data
-results3 <- my_wrapper(urL3, default_var_name = "enrollment_value")
+# Process data - URL3
+results3 <- my_wrapper(url3, default_var_name = "enrollment_value")
 data3_noncounty <- results3$noncounty
 data3_county <- results3$county
-# Process data
+# Process data - URL4
 results4 <- my_wrapper(url4, default_var_name = "enrollment_value")
 data4_noncounty <- results4$noncounty
 data4_county <- results4$county
-# Process data
+# Process data - URL5
 results5 <- my_wrapper(url5, default_var_name = "enrollment_value")
 data5_noncounty <- results5$noncounty
 data5_county <- results5$county
-# Process data
+# Process data - URL6
 results6 <- my_wrapper(url6, default_var_name = "enrollment_value")
 data6_noncounty <- results6$noncounty
 data6_county <- results6$county
 
-
 #Run your data combining function
-combined_results2 <- combine(results3, results4)
-combined_county2 <- combined_results2$county2
-combined_noncounty2 <- combined_results2$noncounty2
+combined_results34 <- combine(results3, results4)
+combined_results345 <- combine(combined_results34, results5)
+combined_results3456 <- combine(combined_results345, results6)
+combined_county3456 <- combined_results3456$county
+combined_noncounty3456 <- combined_results3456$noncounty
 
-#Run your data combining function
-combined_results3 <- combine(results5, results6)
-combined_county3 <- combined_results3$county3
-combined_noncounty3 <- combined_results3$noncounty3
+# Use the plot function on the state data frame
+plot.state(combined_noncounty3456, var_name = "enrollment_value")
 
-plot.county(combined_county, State = "CA", top_bottom = "top", num_counties = 15)
-plot.county(combined_county, State = "TX", top_bottom = "top", num_counties = 4)
-plot.county(combined_county)
-plot.county(combined_county, State = "NY", top_bottom = "top", num_counties = 10)
+# Use the plot function on the county data frame
+# Once specifying the state to be “CA”, the group being the top, the number looked at being 15
+plot.county(combined_county3456, State = "CA", top_bottom = "top", num_counties = 15)
 
+# Once specifying the state to be “TX”, the group being the top, the number looked at being 4
+plot.county(combined_county3456, State = "TX", top_bottom = "top", num_counties = 4)
+
+#Once without specifying anything (defaults used)
+plot.county(combined_county3456)
+
+# Once specifying the state to be “NY”, the group being the top, the number looked at being 10
+plot.county(combined_county3456, State = "NY", top_bottom = "top", num_counties = 10)
 ```
